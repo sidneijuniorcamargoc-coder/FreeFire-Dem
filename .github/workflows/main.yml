@@ -1,3 +1,4 @@
+
 name: Build Android APK
 
 on:
@@ -10,9 +11,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Extract project ZIP
-        run: |
-          unzip FreeFireDemo-Android-Source.zip -d project
-          find project -maxdepth 3 -type f
+        run: unzip FreeFireDemo-Android-Source.zip -d project
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -20,9 +19,13 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Build APK
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Inspect project
         run: |
-          cd project/FreeFireDemo
-          chmod +x gradlew
-          ./gradlew assembleDebug
+          find project -maxdepth 4 -type f | head -100
+          find project -name gradlew -o -name build.gradle -o -name build.gradle.kts
           
